@@ -13,7 +13,8 @@ const client = new Client({
   ] 
 });
 
-client.on('ready', () => {
+client.on('ready', async () => {
+  await prisma.$connect()
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -27,6 +28,11 @@ client.on('messageCreate', async (message) => {
       case "whitelist":
         if (args.length == 1){
           const player_name = args[0]
+          const player_data = await prisma.whitelist.findFirst({where: {minecraft_name: player_name}})
+          if (player_data) {
+            message.channel.send(`${player_name} a déjà été ajouté à la whitelist`)
+            return
+          }
           exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist add ${player_name}^M"`,async (err, stdout, stderr) => {
             console.log({err,stdout,stderr})
             if (err || stderr) {
