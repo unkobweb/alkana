@@ -11,9 +11,11 @@ datasource db {
 }
 
 model Whitelist {
-  id               Int     @id @default(autoincrement())
-  minecraft_name   String  @db.VarChar(255)
-  discord_id       String  @db.VarChar(255)
-  discord_username String  @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+  minecraft_name   String    @db.VarChar(255)
+  discord_id       String    @db.VarChar(255)
+  discord_username String    @db.VarChar(255)
   success          Boolean
+  created_at       DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at       DateTime? @db.Timestamp(6)
 }

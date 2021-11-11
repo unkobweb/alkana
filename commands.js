@@ -10,6 +10,9 @@ async function whitelistAdd(player_name, message){
         AND: [
           {
             success: true
+          },
+          {
+            deleted_at: undefined
           }
         ]
       }
@@ -57,6 +60,9 @@ async function whitelistRemove(player_name, message){
           AND: [
             {
               success: true
+            },
+            {
+              deleted_at: undefined
             }
           ]
         }
@@ -73,7 +79,16 @@ async function whitelistRemove(player_name, message){
             if (!err && !stderr) {
                 exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist reload^M"`)
                 message.channel.send(`✅ ${player_name} a été retiré de la whiteliste`)
-                await prisma.whitelist.delete({where: {id: player_data.id}});
+                await prisma.whitelist.update(
+                    {
+                        where: {
+                            id: player_data.id
+                        }, 
+                        data: {
+                            deleted_at: new Date()
+                        }
+                    }
+                );
             }
         })
     }
