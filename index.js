@@ -19,16 +19,16 @@ client.on('ready', () => {
 
 client.on('messageCreate', async (message) => {
   if (message.content.charAt(0) == "!") {
-    
-    const command = message.content.slice(1);
-    const args = command.split(" ");
-    args.shift();
+    const tmp = message.content.slice(1).split(" ");
+    const command = tmp.shift();
+    const args = [...tmp];
 
     switch (command) {
       case "whitelist":
         if (args.length == 1){
           const player_name = args[0]
           exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist add ${player_name}^M"`,async (err, stdout, stderr) => {
+            console.log({err,stdout,stderr})
             if (err || stderr) {
               message.channel.send(`❌ ${player_name} n'a pas pu être ajouté à la whitelist`)
               await prisma.whitelist.create({
@@ -41,6 +41,7 @@ client.on('messageCreate', async (message) => {
               })
             } else {
               exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist reload^M"`,(err, stdout, stderr) => {
+                console.log({err,stdout,stderr})
                 if (err || stderr){
                   message.channel.send(`❌ La whitelist n'a pas pu être rafraichir`)
                 } else {
@@ -59,9 +60,6 @@ client.on('messageCreate', async (message) => {
             }
           })
         } 
-        break;
-    
-      default:
         break;
     }
   }
