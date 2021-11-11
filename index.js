@@ -2,6 +2,7 @@ const { Client, Intents } = require('discord.js');
 const { exec } = require("child_process");
 require('dotenv').config();
 const { PrismaClient } = require('@prisma/client')
+const { SCREEN_NAME, DISCORD_TOKEN } = process.env; 
 
 const prisma = new PrismaClient();
 
@@ -11,7 +12,6 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES
   ] 
 });
-
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -28,7 +28,7 @@ client.on('messageCreate', async (message) => {
       case "whitelist":
         if (args.length == 1){
           const player_name = args[0]
-          exec(`screen -S alkana -p 0 -X stuff "whitelist add ${player_name}^M"`,async (err, stdout, stderr) => {
+          exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist add ${player_name}^M"`,async (err, stdout, stderr) => {
             if (err || stderr) {
               message.channel.send(`❌ ${player_name} n'a pas pu être ajouté à la whitelist`)
               await prisma.whitelist.create({
@@ -40,7 +40,7 @@ client.on('messageCreate', async (message) => {
                 }
               })
             } else {
-              exec(`screen -S alkana -p 0 -X stuff "whitelist reload^M"`,(err, stdout, stderr) => {
+              exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist reload^M"`,(err, stdout, stderr) => {
                 if (err || stderr){
                   message.channel.send(`❌ La whitelist n'a pas pu être rafraichir`)
                 } else {
@@ -67,4 +67,4 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-client.login('OTA3Njg3MjExNzYyMzMxNzI4.YYqzlw.WJ-yd9BndfY_aA_vhU5Wp4jp7eQ');
+client.login(DISCORD_TOKEN);
