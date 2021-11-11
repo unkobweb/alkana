@@ -28,7 +28,17 @@ client.on('messageCreate', async (message) => {
       case "whitelist":
         if (args.length == 1){
           const player_name = args[0]
-          const player_data = await prisma.whitelist.findFirst({where: {minecraft_name: player_name}})
+          const player_data = await prisma.whitelist.findFirst({
+            where: {
+              minecraft_name: player_name,
+              AND: [
+                {
+                  success: true
+                }
+              ]
+            }
+          })
+          console.log(player_data);
           if (player_data) {
             message.channel.send(`${player_name} a déjà été ajouté à la whitelist`)
             return
