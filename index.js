@@ -40,7 +40,7 @@ client.on('messageCreate', async (message) => {
           })
           console.log(player_data);
           if (player_data) {
-            message.channel.send(`${player_name} a déjà été ajouté à la whitelist`)
+            message.channel.send(`ℹ️ ${player_name} a déjà été ajouté à la whitelist`)
             return
           }
           exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist add ${player_name}^M"`,async (err, stdout, stderr) => {
@@ -62,7 +62,7 @@ client.on('messageCreate', async (message) => {
                   message.channel.send(`❌ La whitelist n'a pas pu être rafraichir`)
                 } else {
                   //exec(`screen -S alkana -p 0 -X stuff say ${player_name} a été ajouté à la whitelist par ${message.author.username}^M`)
-                  message.channel.send(`✔️ ${player_name} peut se connecter sur Alkana !`)
+                  message.channel.send(`✅ ${player_name} peut se connecter sur Alkana !`)
                 }
               })
               await prisma.whitelist.create({
