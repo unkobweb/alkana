@@ -34,7 +34,7 @@ async function whitelistAdd(player_name, message){
           if (err || stderr){
             message.channel.send(`❌ La whitelist n'a pas pu être rafraichir`)
           } else {
-            exec(`screen -S alkana -p 0 -X stuff say ${player_name} a été ajouté à la whitelist par ${message.author.username}^M`)
+            exec(`screen -S alkana -p 0 -X stuff "say ${player_name} a été ajouté à la whitelist par ${message.author.username}^M"`)
             message.channel.send(`✅ ${player_name} peut se connecter sur Alkana !`)
           }
         })
@@ -72,7 +72,7 @@ async function whitelistRemove(player_name, message){
         exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist remove ${player_name}^M"`,async (err, stdout, stderr) => {
             if (!err && !stderr) {
                 exec(`screen -S ${SCREEN_NAME} -p 0 -X stuff "whitelist reload^M"`)
-                message.channel.send(`✅ ${player_name} a pas été retiré de la whiteliste`)
+                message.channel.send(`✅ ${player_name} a été retiré de la whiteliste`)
                 await prisma.whitelist.delete({where: {id: player_data.id}});
             }
         })
