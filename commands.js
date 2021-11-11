@@ -12,7 +12,7 @@ async function whitelistAdd(player_name, message){
             success: true
           },
           {
-            deleted_at: undefined
+            deleted_at: null
           }
         ]
       }
@@ -62,7 +62,7 @@ async function whitelistRemove(player_name, message){
               success: true
             },
             {
-              deleted_at: undefined
+              deleted_at: null
             }
           ]
         }
